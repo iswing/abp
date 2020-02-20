@@ -27,7 +27,7 @@ namespace Microsoft.AspNetCore.RequestLocalization
                 next,
                 new OptionsWrapper<RequestLocalizationOptions>(
                     await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
-                ),
+),
                 _loggerFactory
             );
 

@@ -37,7 +37,7 @@ namespace Microsoft.AspNetCore.Authorization
         public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
         {
             return await AuthorizeAsync(
-                authorizationService, 
+                authorizationService,
                 null,
                 policy
             );

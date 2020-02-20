@@ -27,8 +27,7 @@ namespace Volo.Abp.TenantManagement
         public virtual async Task<TenantDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<Tenant, TenantDto>(
-                await TenantRepository.GetAsync(id)
-            );
+                await TenantRepository.GetAsync(id));
         }
 
         public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)

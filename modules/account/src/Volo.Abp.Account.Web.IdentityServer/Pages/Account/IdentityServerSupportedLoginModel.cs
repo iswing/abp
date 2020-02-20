@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Web.Settings;
+using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
@@ -107,8 +107,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public override async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
             if (action == "Cancel")
             {
                 var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
@@ -121,6 +119,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
                 return Redirect(ReturnUrl);
             }
+
+            await CheckLocalLoginAsync();
 
             ValidateModel();
 

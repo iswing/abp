@@ -10,7 +10,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Web.Settings;
+using Volo.Abp.Account.Settings;
+using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -89,7 +90,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+            await CheckLocalLoginAsync();
 
             ValidateModel();
 
@@ -217,7 +218,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()
         {
-            if (!ValidationHandler.IsValidEmailAddress(LoginInput.UserNameOrEmailAddress))
+            if (!ValidationHelper.IsValidEmailAddress(LoginInput.UserNameOrEmailAddress))
             {
                 return;
             }
@@ -237,6 +238,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             LoginInput.UserNameOrEmailAddress = userByEmail.UserName;
         }
 
+        protected virtual async Task CheckLocalLoginAsync()
+        {
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false))
+            {
+                throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+            }
+        }
+
         public class LoginInputModel
         {
             [Required]
@@ -246,6 +255,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             [Required]
             [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
 
             public bool RememberMe { get; set; }

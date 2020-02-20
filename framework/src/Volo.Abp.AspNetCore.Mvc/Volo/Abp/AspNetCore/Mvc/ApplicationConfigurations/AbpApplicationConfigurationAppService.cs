@@ -61,6 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Localization = await GetLocalizationConfigAsync(),
                 CurrentUser = GetCurrentUser(),
                 Setting = await GetSettingConfigAsync()
+
             };
         }
 

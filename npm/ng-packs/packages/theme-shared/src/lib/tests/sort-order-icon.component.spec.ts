@@ -8,7 +8,7 @@ describe('SortOrderIconComponent', () => {
 
   beforeEach(() => {
     spectator = createHost(
-      '<abp-sort-order-icon key="testKey" [(selectedSortKey)]="selectedSortKey" [(order)]="order"></abp-sort-order-icon>',
+      '<abp-sort-order-icon sortKey="testKey" [(selectedSortKey)]="selectedSortKey" [(order)]="order"></abp-sort-order-icon>',
       {
         hostProps: {
           selectedSortKey: '',
@@ -32,7 +32,7 @@ describe('SortOrderIconComponent', () => {
     component.sort(newKey);
     expect(component.selectedSortKey).toBe(newKey);
     expect(component.order).toBe('asc');
-    expect(component.icon).toBe('');
+    expect(component.icon).toBe('sorting');
   });
 
   test('should change order correctly when sort function called', () => {
